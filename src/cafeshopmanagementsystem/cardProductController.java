@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Date;
 import java.util.ResourceBundle;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -71,7 +72,7 @@ public class cardProductController implements Initializable {
         type = prodData.getType();
         prodID = prodData.getProductId();
         prod_name.setText(prodData.getProductName());
-        prod_price.setText("$" + String.valueOf(prodData.getPrice()));
+        prod_price.setText( String.valueOf(prodData.getPrice())+ "TND" );
         String path = "File:" + prodData.getImage();
         image = new Image(path, 190, 94, false, true);
         prod_imageView.setImage(image);

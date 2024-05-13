@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,9 +27,9 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.AreaChart;
+
 import javafx.scene.chart.BarChart;
-import javafx.scene.chart.XYChart;
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -216,9 +217,7 @@ public class mainFormController implements Initializable {
     
     @FXML
     private Label dashboard_NSP;
-    
-    @FXML
-    private AreaChart<?, ?> dashboard_incomeChart;
+
     
     @FXML
     private BarChart<?, ?> dashboard_CustomerChart;
@@ -272,7 +271,7 @@ public class mainFormController implements Initializable {
                 ti = result.getDouble("SUM(total)");
             }
             
-            dashboard_TI.setText("$" + ti);
+            dashboard_TI.setText("TND" + ti);
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -292,7 +291,7 @@ public class mainFormController implements Initializable {
             if (result.next()) {
                 ti = result.getFloat("SUM(total)");
             }
-            dashboard_TotalI.setText("$" + ti);
+            dashboard_TotalI.setText(ti+" TND" ) ;
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -320,47 +319,9 @@ public class mainFormController implements Initializable {
         }
     }
     
-    public void dashboardIncomeChart() {
-        dashboard_incomeChart.getData().clear();
-        
-        String sql = "SELECT date, SUM(total) FROM receipt GROUP BY date ORDER BY TIMESTAMP(date)";
-        connect = database.connectDB();
-        XYChart.Series chart = new XYChart.Series();
-        try {
-            prepare = connect.prepareStatement(sql);
-            result = prepare.executeQuery();
-            
-            while (result.next()) {
-                chart.getData().add(new XYChart.Data<>(result.getString(1), result.getFloat(2)));
-            }
-            
-            dashboard_incomeChart.getData().add(chart);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
     
-    public void dashboardCustomerChart(){
-        dashboard_CustomerChart.getData().clear();
-        
-        String sql = "SELECT date, COUNT(id) FROM receipt GROUP BY date ORDER BY TIMESTAMP(date)";
-        connect = database.connectDB();
-        XYChart.Series chart = new XYChart.Series();
-        try {
-            prepare = connect.prepareStatement(sql);
-            result = prepare.executeQuery();
-            
-            while (result.next()) {
-                chart.getData().add(new XYChart.Data<>(result.getString(1), result.getInt(2)));
-            }
-            
-            dashboard_CustomerChart.getData().add(chart);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
     
     public void inventoryAddBtn() {
         
@@ -567,7 +528,6 @@ public class mainFormController implements Initializable {
         
     }
 
-    // LETS MAKE A BEHAVIOR FOR IMPORT BTN FIRST
     public void inventoryImportBtn() {
         
         FileChooser openFile = new FileChooser();
@@ -627,7 +587,6 @@ public class mainFormController implements Initializable {
     
     public void inventoryShowData() {
         inventoryListData = inventoryDataList();
-        
         inventory_col_productID.setCellValueFactory(new PropertyValueFactory<>("productId"));
         inventory_col_productName.setCellValueFactory(new PropertyValueFactory<>("productName"));
         inventory_col_type.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -635,7 +594,6 @@ public class mainFormController implements Initializable {
         inventory_col_price.setCellValueFactory(new PropertyValueFactory<>("price"));
         inventory_col_status.setCellValueFactory(new PropertyValueFactory<>("status"));
         inventory_col_date.setCellValueFactory(new PropertyValueFactory<>("date"));
-        
         inventory_tableView.setItems(inventoryListData);
         
     }
@@ -846,7 +804,7 @@ public class mainFormController implements Initializable {
     
     public void menuDisplayTotal() {
         menuGetTotal();
-        menu_total.setText("$" + totalP);
+        menu_total.setText("TND" + totalP);
     }
     
     private double amount;
@@ -866,7 +824,7 @@ public class mainFormController implements Initializable {
                 menu_amount.setText("");
             } else {
                 change = (amount - totalP);
-                menu_change.setText("$" + change);
+                menu_change.setText("TND" + change);
             }
         }
     }
@@ -964,43 +922,15 @@ public class mainFormController implements Initializable {
             
         }
     }
-    
-    public void menuReceiptBtn() {
-        
-        if (totalP == 0 || menu_amount.getText().isEmpty()) {
-            alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Error Message");
-            alert.setContentText("Please order first");
-            alert.showAndWait();
-        } else {
-            HashMap map = new HashMap();
-            map.put("getReceipt", (cID - 1));
-            
-            try {
-                
-                JasperDesign jDesign = JRXmlLoader.load("C:\\Users\\WINDOWS 10\\Documents\\NetBeansProjects\\cafeShopManagementSystem\\src\\cafeshopmanagementsystem\\report.jrxml");
-                JasperReport jReport = JasperCompileManager.compileReport(jDesign);
-                JasperPrint jPrint = JasperFillManager.fillReport(jReport, map, connect);
-                
-                JasperViewer.viewReport(jPrint, false);
-                
-                menuRestart();
-                
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            
-        }
-        
-    }
+
     
     public void menuRestart() {
         totalP = 0;
         change = 0;
         amount = 0;
-        menu_total.setText("$0.0");
+        menu_total.setText("0.0 TND");
         menu_amount.setText("");
-        menu_change.setText("$0.0");
+        menu_change.setText("0.0 TND");
     }
     
     private int cID;
@@ -1092,8 +1022,7 @@ public class mainFormController implements Initializable {
             dashboardDisplayTI();
             dashboardTotalI();
             dashboardNSP();
-            dashboardIncomeChart();
-            dashboardCustomerChart();
+
             
         } else if (event.getSource() == inventory_btn) {
             dashboard_form.setVisible(false);
@@ -1174,8 +1103,7 @@ public class mainFormController implements Initializable {
         dashboardDisplayTI();
         dashboardTotalI();
         dashboardNSP();
-        dashboardIncomeChart();
-        dashboardCustomerChart();
+
         
         inventoryTypeList();
         inventoryStatusList();
