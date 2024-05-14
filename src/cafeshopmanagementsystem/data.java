@@ -5,10 +5,7 @@
  */
 package cafeshopmanagementsystem;
 
-/**
- *
- * @author WINDOWS 10
- */
+
 public class data {
     
     public static String username;

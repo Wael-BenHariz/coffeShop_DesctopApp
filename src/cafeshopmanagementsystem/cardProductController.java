@@ -24,10 +24,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
-/**
- *
- * @author WINDOWS 10
- */
+
 public class cardProductController implements Initializable {
 
     @FXML

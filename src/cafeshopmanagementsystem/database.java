@@ -8,10 +8,7 @@ package cafeshopmanagementsystem;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-/**
- *
- * @author WINDOWS 10
- */
+
 public class database {
 
     public static Connection connectDB() {

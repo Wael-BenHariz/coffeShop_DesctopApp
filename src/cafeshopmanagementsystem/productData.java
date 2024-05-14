@@ -7,10 +7,7 @@ package cafeshopmanagementsystem;
 
 import java.sql.Date;
 
-/**
- *
- * @author WINDOWS 10
- */
+
 public class productData {
 
     private Integer id;

@@ -138,7 +138,7 @@ public class FXMLDocumentController implements Initializable {
                 prepare.setString(2, si_password.getText());
                 
                 result = prepare.executeQuery();
-                // IF SUCCESSFULLY LOGIN, THEN PROCEED TO ANOTHER FORM WHICH IS OUR MAIN FORM 
+                // IF SUCCESSFULLY LOGIN, THEN PROCEED TO ANOTHER FORM WHICH IS MAIN FORM
                 if (result.next()) {
                     // TO GET THE USERNAME THAT USER USED
                     data.username = si_username.getText();
@@ -149,7 +149,6 @@ public class FXMLDocumentController implements Initializable {
                     alert.setContentText("Successfully Login!");
                     alert.showAndWait();
                     
-                    // LINK YOUR MAIN FORM
                     Parent root = FXMLLoader.load(getClass().getResource("mainForm.fxml"));
                     
                     Stage stage = new Stage();
